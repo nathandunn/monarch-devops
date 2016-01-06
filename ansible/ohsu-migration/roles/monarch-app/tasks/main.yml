@@ -1,0 +1,45 @@
+---
+
+- name: Install git
+  apt: name=git state=latest update_cache=yes
+  sudo: true
+
+- name: Install python-software-properties
+  apt: name=python-software-properties state=latest update_cache=yes
+  sudo: true
+
+- name: Install g++
+  apt: name=g++-4.8 state=latest update_cache=yes
+  sudo: true
+
+- name: Install gcc
+  apt: name=gcc-4.8 state=latest update_cache=yes
+  sudo: true
+
+- name: update-alternatives g++ and gcc
+  command: update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8
+  sudo: true
+
+- name: clone github repo
+  git: repo=https://github.com/monarch-initiative/monarch-app.git
+       dest=/opt/monarch-app
+  sudo: true
+
+- name: chown
+  command: chown -R vagrant:vagrant /opt/monarch-app
+  sudo: true
+
+- name: install monarch
+  command: bash -c "source ~/.nvm/nvm.sh && cd /opt/monarch-app && nvm use v0.12.2 && ./install.sh && npm install fibers"
+
+- name: added supervisor conf
+  copy: src=monarch-app.conf dest=/etc/supervisor/conf.d/monarch-app.conf
+  sudo: true
+
+- name: supervisor reread
+  command: supervisorctl reread
+  sudo: true
+
+- name: supervisor update
+  command: supervisorctl update
+  sudo: true

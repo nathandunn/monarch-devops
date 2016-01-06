@@ -1,0 +1,49 @@
+---
+
+# Jetty 6 JSP bugged http://serverfault.com/questions/426280/jetty-interprets-jetty-args-as-file-name/730626#730626
+- name: jetty8
+  apt: name=jetty8 state=latest
+
+# Jetty 9 manual installation
+#- name: add jetty group
+#  group: name=jetty state=present
+
+#- name: add jetty user
+#  user: name=jetty group=jetty
+
+#- name: download jetty
+#  get_url: url=http://eclipse.org/downloads/download.php?file=/jetty/stable-9/dist/jetty-distribution-9.3.6.v20151106.tar.gz&r=1 dest=/tmp owner=jetty
+
+#- name: untar jetty
+#  unarchive: src=/tmp/jetty-distribution-9.3.6.v20151106.tar.gz dest=/tmp/ copy=no
+
+#- name: Move from tmp to opt
+#  command: mv /tmp/jetty-distribution-9.3.6.v20151106 /opt/jetty
+
+#- name: Copy script
+#  command: cp /opt/jetty/bin/jetty.sh /etc/init.d/jetty
+
+- name: copy jetty config
+  copy: src=jetty.conf dest=/etc/default/jetty8
+
+- name: download solr
+  get_url: url=http://archive.apache.org/dist/lucene/solr/3.6.2/apache-solr-3.6.2.tgz dest=/tmp
+
+- name: untar solr
+  unarchive: src=/tmp/apache-solr-3.6.2.tgz dest=/tmp/ copy=no
+
+- name: copy solr war
+  shell: mv /tmp/apache-solr-3.6.2/dist/apache-solr-3.6.2.war /var/lib/jetty8/webapps/solr.war
+
+- name: download solr data
+  get_url: url=http://sirius.monarchinitiative.org/solr.tgz dest=/var/www/html
+
+- name: untar solr data
+  shell: tar xzfv /var/www/html/solr.tgz -C /var
+
+# For local testing
+#- name: copy local test data
+#  copy: src=/home/jnguyenxuan/solr dest=/var
+
+- name: restart jetty8
+  shell: sudo service jetty8 restart

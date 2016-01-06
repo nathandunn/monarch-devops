@@ -1,0 +1,3 @@
+---
+- name: Install httpd
+  apt: name=apache2 state=latest

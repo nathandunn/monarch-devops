@@ -1,0 +1,7 @@
+---
+
+- name: Install node
+  command: bash -c "source ~/.nvm/nvm.sh && nvm install v0.12.2"
+
+- name: Ensure npm version
+  command: bash -c "source ~/.nvm/nvm.sh && nvm use v0.12.2 && npm install -g npm@3.4.0"

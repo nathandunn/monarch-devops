@@ -1,0 +1,10 @@
+---
+
+- name: download graph
+  get_url: url=http://kato.crbs.ucsd.edu/scigraph.tgz dest=/var/www/html
+
+- name: Creates directory
+  file: path=/var/scigraph state=directory
+
+- name: expand graph
+  unarchive: src=/var/www/html/scigraph.tgz dest=/var/scigraph copy=no

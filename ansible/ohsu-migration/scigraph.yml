@@ -1,0 +1,7 @@
+- hosts: scigraph
+  sudo: true
+  roles:
+    - java8-oracle
+    - apache2
+    - docker
+    - scigraph

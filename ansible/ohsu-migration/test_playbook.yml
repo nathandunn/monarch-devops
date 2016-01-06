@@ -1,0 +1,10 @@
+# Test playbook for Vagrant box:
+# vagrant destroy && vagrant up
+# vagrant ssh
+- hosts: all
+  sudo_user: vagrant
+  roles:
+    - nvm
+    - nodejs
+    - supervisor
+    - monarch-app
