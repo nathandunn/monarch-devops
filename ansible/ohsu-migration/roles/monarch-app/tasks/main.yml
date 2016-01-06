@@ -26,7 +26,7 @@
   sudo: true
 
 - name: chown
-  command: chown -R vagrant:vagrant /opt/monarch-app
+  command: chown -R monarch:monarch /opt/monarch-app
   sudo: true
 
 - name: install monarch

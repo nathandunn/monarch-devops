@@ -1,8 +1,5 @@
-# Test playbook for Vagrant box:
-# vagrant destroy && vagrant up
-# vagrant ssh
-- hosts: all
-  sudo_user: vagrant
+- hosts: monarch-app-prod
+  sudo_user: monarch
   roles:
     - nvm
     - nodejs

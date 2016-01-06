@@ -1,4 +1,4 @@
-- hosts: all
+- hosts: monarch-solr-prod
   sudo: true
   roles:
     - java8-oracle
