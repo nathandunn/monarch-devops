@@ -2,5 +2,5 @@
   sudo: true
   roles:
     - java8-oracle
-    - jetty-solr
     - apache2
+    - jetty-solr
