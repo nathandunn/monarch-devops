@@ -9,3 +9,5 @@
     - supervisor
     - nginx
     - monarch-app
+  vars:
+    target_user: vagrant

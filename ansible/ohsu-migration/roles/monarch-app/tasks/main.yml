@@ -8,6 +8,10 @@
   apt: name=python-software-properties state=latest update_cache=yes
   sudo: true
 
+- name: Install build-essential
+  apt: name=build-essential state=latest update_cache=yes
+  sudo: true
+
 - name: Install g++
   apt: name=g++-4.8 state=latest update_cache=yes
   sudo: true
@@ -16,8 +20,20 @@
   apt: name=gcc-4.8 state=latest update_cache=yes
   sudo: true
 
-- name: update-alternatives g++ and gcc
-  command: update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8
+- name: update-alternatives gcc
+  command: update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 20
+  sudo: true
+
+- name: update-alternatives g++
+  command: update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 20
+  sudo: true
+
+- name: config gcc
+  command: update-alternatives --config gcc
+  sudo: true
+
+- name: config g++
+  command: update-alternatives --config g++
   sudo: true
 
 - name: clone github repo
@@ -26,15 +42,21 @@
   sudo: true
 
 - name: chown
-  command: chown -R monarch:monarch /opt/monarch-app
+  command: chown -R {{ target_user }}:{{ target_user }} /opt/monarch-app
   sudo: true
 
 - name: install monarch
-  command: bash -c "source /home/monarch/.nvm/nvm.sh && cd /opt/monarch-app && nvm use v0.12.2 && ./install.sh && npm install fibers"
+  command: bash -c "source /home/{{ target_user }}/.nvm/nvm.sh && cd /opt/monarch-app && nvm use v0.12.2 && ./install.sh && npm install fibers"
   sudo: true
+  environment:
+    CC: gcc
 
 - name: added supervisor conf
   copy: src=monarch-app.conf dest=/etc/supervisor/conf.d/monarch-app.conf
+  sudo: true
+
+- name: added supervisor conf
+  replace: dest=/etc/supervisor/conf.d/monarch-app.conf regexp='TARGET_USER' replace={{ target_user }} backup=yes
   sudo: true
 
 - name: supervisor reread
