@@ -2,8 +2,10 @@
 # vagrant destroy && vagrant up
 # vagrant ssh
 - hosts: all
-  sudo: true
+  sudo_user: vagrant
   roles:
-    - java8-oracle
+    - nvm
+    - nodejs
+    - supervisor
     - nginx
-    - jetty-solr
+    - monarch-app

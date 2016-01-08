@@ -30,7 +30,8 @@
   sudo: true
 
 - name: install monarch
-  command: bash -c "source ~/.nvm/nvm.sh && cd /opt/monarch-app && nvm use v0.12.2 && ./install.sh && npm install fibers"
+  command: bash -c "source /home/monarch/.nvm/nvm.sh && cd /opt/monarch-app && nvm use v0.12.2 && ./install.sh && npm install fibers"
+  sudo: true
 
 - name: added supervisor conf
   copy: src=monarch-app.conf dest=/etc/supervisor/conf.d/monarch-app.conf
@@ -46,6 +47,8 @@
 
 - name: Copy nginx conf
   copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+  sudo: true
 
 - name: Restart nginx
   service: name=nginx state=restarted
+  sudo: true
