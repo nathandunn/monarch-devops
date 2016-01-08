@@ -1,7 +1,7 @@
 # Test playbook for Vagrant box:
 # vagrant destroy && vagrant up
 # vagrant ssh
-- hosts: all
+- hosts: monarch-ttl-prod
   roles:
     - nginx
     - monarch-ttl
