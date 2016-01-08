@@ -43,3 +43,9 @@
 - name: supervisor update
   command: supervisorctl update
   sudo: true
+
+- name: Copy nginx conf
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+
+- name: Restart nginx
+  service: name=nginx state=restarted

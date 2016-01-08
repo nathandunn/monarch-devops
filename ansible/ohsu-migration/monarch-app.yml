@@ -4,4 +4,5 @@
     - nvm
     - nodejs
     - supervisor
+    - nginx
     - monarch-app

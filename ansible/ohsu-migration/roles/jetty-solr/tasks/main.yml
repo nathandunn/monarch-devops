@@ -1,5 +1,14 @@
 ---
 
+- name: Creates nginx static file directory
+  file: path=/var/www/data state=directory
+
+- name: Copy nginx conf
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+
+- name: Restart nginx
+  service: name=nginx state=restarted
+
 # Jetty 6 JSP bugged http://serverfault.com/questions/426280/jetty-interprets-jetty-args-as-file-name/730626#730626
 - name: jetty8
   apt: name=jetty8 state=latest
@@ -36,10 +45,10 @@
   shell: mv /tmp/apache-solr-3.6.2/dist/apache-solr-3.6.2.war /var/lib/jetty8/webapps/solr.war
 
 - name: download solr data
-  get_url: url=http://sirius.monarchinitiative.org/solr.tgz dest=/var/www/html
+  get_url: url=http://sirius.monarchinitiative.org/solr.tgz dest=/var/www/data
 
 - name: untar solr data
-  shell: tar xzfv /var/www/html/solr.tgz -C /var
+  shell: tar xzfv /var/www/data/solr.tgz -C /var
 
 # For local testing
 #- name: copy local test data

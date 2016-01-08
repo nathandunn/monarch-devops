@@ -1,6 +1,6 @@
 - hosts: monarch-solr-prod
   sudo: true
   roles:
+    - nginx
     - java8-oracle
-    - apache2
     - jetty-solr

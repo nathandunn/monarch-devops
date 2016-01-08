@@ -5,5 +5,5 @@
   sudo: true
   roles:
     - java8-oracle
-    - apache2
+    - nginx
     - jetty-solr
