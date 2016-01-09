@@ -1,7 +1,7 @@
 # Test playbook for Vagrant box:
 # vagrant destroy && vagrant up
 # vagrant ssh
-- hosts: all
+- hosts: monach-mme-prod
   roles:
     - java8-oracle
     - supervisor
@@ -9,4 +9,4 @@
     - monarch-mme
   sudo: true
   vars:
-    target_user: vagrant
+    target_user: monarch

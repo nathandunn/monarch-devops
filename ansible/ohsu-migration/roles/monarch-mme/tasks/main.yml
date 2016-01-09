@@ -1,0 +1,53 @@
+---
+
+- name: Install unzip
+  apt: name=unzip state=latest update_cache=yes
+
+- name: Install git
+  apt: name=git state=latest update_cache=yes
+
+- name: Add sbt repo
+  command: bash -c 'echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list'
+  sudo: true
+
+- name: Add sbt repo key
+  command: apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
+  sudo: true
+
+- name: Install sbt
+  apt: name=sbt state=latest update_cache=yes
+
+- name: clone github repo
+  git: repo=https://github.com/monarch-initiative/monarch-mme.git
+       dest=/opt/monarch-mme
+  sudo: true
+
+- name: chown
+  command: chown -R {{ target_user }}:{{ target_user }} /opt/monarch-mme
+  sudo: true
+
+- name: package monarch-mme
+  command: bash -c "cd /opt/monarch-mme && sbt clean dist"
+
+- name: unzip distrib
+  unarchive: src=/opt/monarch-mme/target/universal/monarch-mme-1.0-SNAPSHOT.zip dest=/opt/monarch-mme/target copy=no
+
+- name: add supervisor conf
+  copy: src=monarch-mme.conf dest=/etc/supervisor/conf.d/monarch-mme.conf
+  sudo: true
+
+- name: supervisor reread
+  command: supervisorctl reread
+  sudo: true
+
+- name: supervisor update
+  command: supervisorctl update
+  sudo: true
+
+- name: Copy nginx conf
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+  sudo: true
+
+- name: Restart nginx
+  service: name=nginx state=restarted
+  sudo: true

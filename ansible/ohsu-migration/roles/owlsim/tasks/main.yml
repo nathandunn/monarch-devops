@@ -1,0 +1,48 @@
+---
+
+- name: Install git
+  apt: name=git state=latest update_cache=yes
+
+- name: clone owltools github repo
+  git: repo=https://github.com/owlcollab/owltools.git
+       dest=/opt/owltools
+  sudo: true
+
+- name: chown
+  command: chown -R {{ target_user }}:{{ target_user }} /opt/owltools
+  sudo: true
+
+- name: Install mvn
+  apt: name=maven state=latest update_cache=yes
+
+- name: package monarch-mme
+  command: bash -c "cd /opt/owltools/OWLTools-Parent && mvn clean package"
+
+- name: download all.owl
+  get_url: url=https://build.berkeleybop.org/job/build-owlsim-files/lastSuccessfulBuild/artifact/server/all.owl dest=/opt/owltools/all.owl validate_certs=no
+
+- name: download all.owl
+  get_url: url=https://build.berkeleybop.org/job/build-owlsim-files/lastSuccessfulBuild/artifact/server/ic-cache.owl dest=/opt/owltools/ic-cache.owl validate_certs=no
+
+- name: download all.owl
+  get_url: url=https://build.berkeleybop.org/job/build-owlsim-files/lastSuccessfulBuild/artifact/server/owlsim.cache dest=/opt/owltools/owlsim.cache validate_certs=no
+
+- name: add supervisor conf
+  copy: src=owlsim.conf dest=/etc/supervisor/conf.d/owlsim.conf
+  sudo: true
+
+- name: supervisor reread
+  command: supervisorctl reread
+  sudo: true
+
+- name: supervisor update
+  command: supervisorctl update
+  sudo: true
+
+- name: Copy nginx conf
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+  sudo: true
+
+- name: Restart nginx
+  service: name=nginx state=restarted
+  sudo: true
