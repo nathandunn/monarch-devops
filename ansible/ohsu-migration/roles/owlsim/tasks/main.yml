@@ -15,16 +15,16 @@
 - name: Install mvn
   apt: name=maven state=latest update_cache=yes
 
-- name: package monarch-mme
+- name: package owlsim
   command: bash -c "cd /opt/owltools/OWLTools-Parent && mvn clean package"
 
 - name: download all.owl
   get_url: url=https://build.berkeleybop.org/job/build-owlsim-files/lastSuccessfulBuild/artifact/server/all.owl dest=/opt/owltools/all.owl validate_certs=no
 
-- name: download all.owl
+- name: download ic-cache.owl
   get_url: url=https://build.berkeleybop.org/job/build-owlsim-files/lastSuccessfulBuild/artifact/server/ic-cache.owl dest=/opt/owltools/ic-cache.owl validate_certs=no
 
-- name: download all.owl
+- name: download owlsim.cache
   get_url: url=https://build.berkeleybop.org/job/build-owlsim-files/lastSuccessfulBuild/artifact/server/owlsim.cache dest=/opt/owltools/owlsim.cache validate_certs=no
 
 - name: add supervisor conf

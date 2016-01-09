@@ -1,0 +1,9 @@
+- hosts: monarch-app-prod
+  roles:
+    - java7-oracle
+    - supervisor
+    - nginx
+    - owlsim
+  sudo: true
+  vars:
+    target_user: monarch

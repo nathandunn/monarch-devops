@@ -3,10 +3,10 @@
 # vagrant ssh
 - hosts: all
   roles:
-    - java8-oracle
+    - java7-oracle
     - supervisor
     - nginx
-    - monarch-mme
+    - owlsim
   sudo: true
   vars:
     target_user: vagrant
