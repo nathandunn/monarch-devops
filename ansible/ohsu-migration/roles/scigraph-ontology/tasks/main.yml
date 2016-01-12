@@ -1,11 +1,11 @@
 ---
 
-# - name: download graph
-#   get_url: url=http://kato.crbs.ucsd.edu/scigraph.tgz dest=/var/www/data
+- name: download graph
+  get_url: url=http://kato.crbs.ucsd.edu/scigraph.tgz dest=/var/www/data
 
 # local testing
-- name: copy graph
-  copy: src=/home/jnguyenxuan/scigraph.tgz dest=/var/www/data
+#- name: copy graph
+#  copy: src=/home/jnguyenxuan/scigraph.tgz dest=/var/www/data
 
 - name: Creates directory
   file: path=/var/scigraph state=directory
