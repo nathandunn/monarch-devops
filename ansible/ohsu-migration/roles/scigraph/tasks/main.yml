@@ -1,10 +1,71 @@
 ---
 
-- name: download graph
-  get_url: url=http://kato.crbs.ucsd.edu/scigraph.tgz dest=/var/www/html
+- name: Creates nginx static file directory
+  file: path=/var/www/data state=directory
+
+- name: Copy nginx conf
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+
+- name: Restart nginx
+  service: name=nginx state=restarted
+
+- name: Install git
+  apt: name=git state=latest update_cache=yes
+  sudo: true
+
+- name: Install maven
+  apt: name=maven state=latest update_cache=yes
+  sudo: true
+
+- name: clone scigraph github repo
+  git: repo=https://github.com/SciGraph/SciGraph
+       dest=/opt/SciGraph
+  sudo: true
+
+- name: clone dipper repo
+  git: repo=https://github.com/monarch-initiative/dipper.git
+       dest=/opt/dipper
+  sudo: true
+
+- name: clone monarch cypher queries github repo
+  git: repo=https://github.com/monarch-initiative/monarch-cypher-queries.git
+       dest=/opt/monarch-cypher-queries
+  sudo: true
+
+- name: build SciGraph
+  command: bash -c 'cd /opt/SciGraph && mvn clean install -DskipTests'
+  sudo: true
+
+- name: package dipper curie file
+  command: bash -c 'cd /opt/dipper/maven && mvn clean install'
+  sudo: true
+
+- name: package cypher dynamic queries file
+  command: bash -c 'cd /opt/monarch-cypher-queries && mvn clean install'
+  sudo: true
+
+# - name: download graph
+#   get_url: url=http://kato.crbs.ucsd.edu/scigraph.tgz dest=/var/www/data
+
+# loca testing
+- name: copy graph
+  copy: src=/home/jnguyenxuan/scigraph.tgz dest=/var/www/data
 
 - name: Creates directory
   file: path=/var/scigraph state=directory
 
 - name: expand graph
-  unarchive: src=/var/www/html/scigraph.tgz dest=/var/scigraph copy=no
+  unarchive: src=/var/www/data/scigraph.tgz dest=/var/scigraph copy=no
+
+- name: clone scigraph docker
+  git: repo=https://github.com/monarch-initiative/SciGraph-docker-monarch-data.git
+       dest=/opt/SciGraph-docker-monarch-data
+  sudo: true
+
+- name: build docker images
+  command: bash -c 'cd /opt/SciGraph-docker-monarch-data && mvn clean package'
+  sudo: true
+
+- name: start service
+  command: docker run -v /var/scigraph:/scigraph -d -p 9000:9000 --name scigraph-services scigraph-services-monarch
+  sudo: true

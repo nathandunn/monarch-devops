@@ -1,0 +1,27 @@
+---
+
+# - name: download graph
+#   get_url: url=http://kato.crbs.ucsd.edu/scigraph.tgz dest=/var/www/data
+
+# local testing
+- name: copy graph
+  copy: src=/home/jnguyenxuan/scigraph.tgz dest=/var/www/data
+
+- name: Creates directory
+  file: path=/var/scigraph state=directory
+
+- name: expand graph
+  unarchive: src=/var/www/data/scigraph.tgz dest=/var/scigraph copy=no
+
+- name: clone scigraph docker
+  git: repo=https://github.com/monarch-initiative/SciGraph-docker-monarch-ontology.git
+       dest=/opt/SciGraph-docker-monarch-ontology
+  sudo: true
+
+- name: build docker images
+  command: bash -c 'cd /opt/SciGraph-docker-monarch-ontology && mvn clean package'
+  sudo: true
+
+- name: start service
+  command: docker run -v /var/scigraph:/scigraph -d -p 9000:9000 --name scigraph-services scigraph-services-monarch-ontology
+  sudo: true

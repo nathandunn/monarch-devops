@@ -1,0 +1,8 @@
+- hosts: scigraph-ontology-prod
+  sudo: true
+  roles:
+    - java8-oracle
+    - nginx
+    - docker
+    - scigraph-base
+    - scigraph-ontology

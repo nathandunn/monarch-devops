@@ -1,0 +1,36 @@
+---
+
+- name: Creates nginx static file directory
+  file: path=/var/www/data state=directory
+
+- name: Copy nginx conf
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+
+- name: Restart nginx
+  service: name=nginx state=restarted
+
+- name: Install git
+  apt: name=git state=latest update_cache=yes
+  sudo: true
+
+- name: Install maven
+  apt: name=maven state=latest update_cache=yes
+  sudo: true
+
+- name: clone scigraph github repo
+  git: repo=https://github.com/SciGraph/SciGraph
+       dest=/opt/SciGraph
+  sudo: true
+
+- name: clone dipper repo
+  git: repo=https://github.com/monarch-initiative/dipper.git
+       dest=/opt/dipper
+  sudo: true
+
+- name: build SciGraph
+  command: bash -c 'cd /opt/SciGraph && mvn clean install -DskipTests'
+  sudo: true
+
+- name: package dipper curie file
+  command: bash -c 'cd /opt/dipper/maven && mvn clean install'
+  sudo: true

@@ -1,12 +1,12 @@
 # Test playbook for Vagrant box:
 # vagrant destroy && vagrant up
 # vagrant ssh
+# vagrant provision // rerun the playbook
 - hosts: all
-  roles:
-    - java7-oracle
-    - supervisor
-    - nginx
-    - owlsim
   sudo: true
-  vars:
-    target_user: vagrant
+  roles:
+    - java8-oracle
+    - nginx
+    - docker
+    - scigraph-base
+    - scigraph-ontology

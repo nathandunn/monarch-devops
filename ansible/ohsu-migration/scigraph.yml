@@ -2,6 +2,6 @@
   sudo: true
   roles:
     - java8-oracle
-    - apache2
+    - nginx
     - docker
     - scigraph
