@@ -1,5 +1,5 @@
 - hosts: scigraph-data-prod
-  sudo: true
+  become: true
   roles:
     - java8-oracle
     - nginx

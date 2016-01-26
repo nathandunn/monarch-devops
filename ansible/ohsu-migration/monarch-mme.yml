@@ -4,6 +4,6 @@
     - supervisor
     - nginx
     - monarch-mme
-  sudo: true
+  become: true
   vars:
     target_user: monarch

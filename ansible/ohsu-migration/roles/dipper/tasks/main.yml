@@ -1,0 +1,23 @@
+---
+- name: Install python3-setuptools
+  apt: name=python3-setuptools state=latest update_cache=yes
+
+- name: Install python3-dev
+  apt: name=python3-dev state=latest update_cache=yes
+
+- name: libpq-dev
+  apt: name=libpq-dev state=latest update_cache=yes
+
+- name: libjpeg-dev
+  apt: name=libjpeg-dev state=latest update_cache=yes
+
+- name: libxml2-dev
+  apt: name=libxml2-dev state=latest update_cache=yes
+
+- name: libxslt1-dev
+  apt: name=libxslt1-dev state=latest update_cache=yes
+
+
+wget -qN http://build.berkeleybop.org/userContent/owltools/owltools
+chmod ugo+x owltools
+wget -qN http://build.berkeleybop.org/userContent/owltools/owltools-runner-all.jar

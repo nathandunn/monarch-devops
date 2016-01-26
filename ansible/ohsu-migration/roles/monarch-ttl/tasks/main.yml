@@ -1,14 +1,14 @@
 ---
 - name: Creates nginx static file directory
   file: path=/var/www/data state=directory
-  sudo: true
+  become: true
 
 - name: Copy nginx conf
   copy: src=nginx.conf dest=/etc/nginx/nginx.conf
-  sudo: true
+  become: true
 
 - name: Restart nginx
   service: name=nginx state=restarted
-  sudo: true
+  become: true
 
 # Then scp data from /export/www/html/monarch

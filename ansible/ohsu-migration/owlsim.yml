@@ -4,6 +4,6 @@
     - supervisor
     - nginx
     - owlsim
-  sudo: true
+  become: true
   vars:
     target_user: monarch

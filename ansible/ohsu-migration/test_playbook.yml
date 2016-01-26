@@ -3,10 +3,6 @@
 # vagrant ssh
 # vagrant provision // rerun the playbook
 - hosts: all
-  sudo: true
+  become: true
   roles:
-    - java8-oracle
-    - nginx
-    - docker
-    - scigraph-base
-    - scigraph-ontology
+    - java7-oracle

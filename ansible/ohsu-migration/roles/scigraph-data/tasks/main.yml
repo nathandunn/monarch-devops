@@ -3,11 +3,11 @@
 - name: clone monarch cypher queries github repo
   git: repo=https://github.com/monarch-initiative/monarch-cypher-queries.git
        dest=/opt/monarch-cypher-queries
-  sudo: true
+  become: true
 
 - name: package cypher dynamic queries file
   command: bash -c 'cd /opt/monarch-cypher-queries && mvn clean install'
-  sudo: true
+  become: true
 
 - name: download graph
   get_url: url=http://rosie.crbs.ucsd.edu/scigraph.tgz dest=/var/www/data
@@ -25,12 +25,12 @@
 - name: clone scigraph docker
   git: repo=https://github.com/monarch-initiative/SciGraph-docker-monarch-data.git
        dest=/opt/SciGraph-docker-monarch-data
-  sudo: true
+  become: true
 
 - name: build docker images
   command: bash -c 'cd /opt/SciGraph-docker-monarch-data && mvn clean package'
-  sudo: true
+  become: true
 
 - name: start service
   command: docker run -v /var/scigraph:/scigraph -d -p 9000:9000 --name scigraph-services scigraph-services-monarch
-  sudo: true
+  become: true

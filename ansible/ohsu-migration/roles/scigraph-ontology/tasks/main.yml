@@ -16,12 +16,12 @@
 - name: clone scigraph docker
   git: repo=https://github.com/monarch-initiative/SciGraph-docker-monarch-ontology.git
        dest=/opt/SciGraph-docker-monarch-ontology
-  sudo: true
+  become: true
 
 - name: build docker images
   command: bash -c 'cd /opt/SciGraph-docker-monarch-ontology && mvn clean package'
-  sudo: true
+  become: true
 
 - name: start service
   command: docker run -v /var/scigraph:/scigraph -d -p 9000:9000 --name scigraph-services scigraph-services-monarch-ontology
-  sudo: true
+  become: true

@@ -2,4 +2,4 @@
 
 - name: Install supervisor
   apt: name=supervisor state=latest
-  sudo: true
+  become: true

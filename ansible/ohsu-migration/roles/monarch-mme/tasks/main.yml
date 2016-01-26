@@ -8,11 +8,11 @@
 
 - name: Add sbt repo
   command: bash -c 'echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list'
-  sudo: true
+  become: true
 
 - name: Add sbt repo key
   command: apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
-  sudo: true
+  become: true
 
 - name: Install sbt
   apt: name=sbt state=latest update_cache=yes
@@ -20,11 +20,11 @@
 - name: clone github repo
   git: repo=https://github.com/monarch-initiative/monarch-mme.git
        dest=/opt/monarch-mme
-  sudo: true
+  become: true
 
 - name: chown
   command: chown -R {{ target_user }}:{{ target_user }} /opt/monarch-mme
-  sudo: true
+  become: true
 
 - name: package monarch-mme
   command: bash -c "cd /opt/monarch-mme && sbt clean dist"
@@ -34,20 +34,20 @@
 
 - name: add supervisor conf
   copy: src=monarch-mme.conf dest=/etc/supervisor/conf.d/monarch-mme.conf
-  sudo: true
+  become: true
 
 - name: supervisor reread
   command: supervisorctl reread
-  sudo: true
+  become: true
 
 - name: supervisor update
   command: supervisorctl update
-  sudo: true
+  become: true
 
 - name: Copy nginx conf
   copy: src=nginx.conf dest=/etc/nginx/nginx.conf
-  sudo: true
+  become: true
 
 - name: Restart nginx
   service: name=nginx state=restarted
-  sudo: true
+  become: true

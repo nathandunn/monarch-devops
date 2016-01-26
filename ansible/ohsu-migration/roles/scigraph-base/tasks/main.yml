@@ -11,26 +11,30 @@
 
 - name: Install git
   apt: name=git state=latest update_cache=yes
-  sudo: true
+  become: true
 
 - name: Install maven
   apt: name=maven state=latest update_cache=yes
-  sudo: true
+  become: true
 
 - name: clone scigraph github repo
   git: repo=https://github.com/SciGraph/SciGraph
        dest=/opt/SciGraph
-  sudo: true
+  become: true
 
 - name: clone dipper repo
   git: repo=https://github.com/monarch-initiative/dipper.git
        dest=/opt/dipper
-  sudo: true
+  become: true
 
 - name: build SciGraph
   command: bash -c 'cd /opt/SciGraph && mvn clean install -DskipTests'
-  sudo: true
+  become: true
 
 - name: package dipper curie file
   command: bash -c 'cd /opt/dipper/maven && mvn clean install'
-  sudo: true
+  become: true
+
+- name: add monarch user to the docker group
+  command: bash -c 'sudo usermod -aG docker monarch'
+  become: true

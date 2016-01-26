@@ -1,5 +1,5 @@
 - hosts: monarch-app-prod
-  sudo_user: monarch
+  become_user: monarch
   roles:
     - nvm
     - nodejs

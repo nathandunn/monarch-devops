@@ -1,5 +1,5 @@
 - hosts: monarch-solr-prod
-  sudo: true
+  become: true
   roles:
     - nginx
     - java8-oracle
