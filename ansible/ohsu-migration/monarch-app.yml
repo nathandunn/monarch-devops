@@ -1,5 +1,4 @@
 - hosts: monarch-app-prod
-  become_user: monarch
   roles:
     - nvm
     - nodejs
