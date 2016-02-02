@@ -1,0 +1,10 @@
+- hosts: monarch-noctua-prod
+  roles:
+    - nvm
+    - nodejs
+    - supervisor
+    - nginx
+    - java8-oracle
+    - monarch-noctua
+  vars:
+    target_user: monarch
