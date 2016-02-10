@@ -1,0 +1,170 @@
+---
+
+- name: Install git
+  apt: name=git state=latest update_cache=yes
+  become: true
+
+- name: Install subversion 
+  apt: name=subversion state=latest update_cache=yes
+  become: true
+
+- name: Install python-software-properties
+  apt: name=python-software-properties state=latest update_cache=yes
+  become: true
+
+- name: Install build-essential
+  apt: name=build-essential state=latest update_cache=yes
+  become: true
+
+- name: Install g++
+  apt: name=g++-4.8 state=latest update_cache=yes
+  become: true
+
+- name: Install gcc
+  apt: name=gcc-4.8 state=latest update_cache=yes
+  become: true
+
+- name: update-alternatives gcc
+  command: update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 20
+  become: true
+
+- name: update-alternatives g++
+  command: update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 20
+  become: true
+
+- name: config gcc
+  command: update-alternatives --config gcc
+  become: true
+
+- name: config g++
+  command: update-alternatives --config g++
+  become: true
+
+
+###
+### Node.js; 4.x
+### Picked out of: curl -sL https://deb.nodesource.com/setup_4.x
+###
+## Get nodesource key.
+- name: node repo key
+  apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
+  become: true
+
+## Get nodejs repo, then recent version.
+- name: get nodejs repo
+  apt_repository: repo='deb https://deb.nodesource.com/node_4.x trusty main'
+  become: true
+- name: install nodejs
+  apt: pkg=nodejs state=present
+  become: true
+
+## Get code and data for Noctua
+
+- name: git clone noctua experimental
+  git: repo=https://github.com/DoctorBud/noctua.git
+       dest=/opt/noctua
+       version=typo-fixes
+       update=yes
+  become: true
+# - name: git clone noctua master
+#   git: repo=https://github.com/geneontology/noctua.git
+#        dest=/opt/noctua
+#        version=master
+#        update=yes
+#   become: true
+- name: chown
+  command: chown -R {{ target_user }}:{{ target_user }} /opt/noctua
+  become: true
+
+- name: git clone monarch-phenote master
+  git: repo=https://github.com/monarch-initiative/monarch-phenote.git
+       dest=/opt/monarch-phenote
+       version=master
+       update=yes
+  become: true
+- name: chown
+  command: chown -R {{ target_user }}:{{ target_user }} /opt/monarch-phenote
+  become: true
+
+- name: git clone noctua-models master
+  git: repo=https://github.com/geneontology/noctua-models.git
+       dest=/opt/noctua-models
+       version=master
+       update=yes
+  become: true
+
+- name: git clone go-site master
+  git: repo=https://github.com/geneontology/go-site.git
+       dest=/opt/go-site
+       version=master
+       update=yes
+  become: true
+
+- name: geneontology.org (limited) svn checkout
+  subversion: repo=svn://ext.geneontology.org/trunk/ontology dest=/opt/geneontology.org/trunk/ontology
+  become: true
+
+###
+### Noctua config and setup.
+###
+## NPM install.
+- name: npm install for noctua
+  command: npm install
+  args:
+    chdir: /opt/noctua/
+## Get the right config in place.
+- name: get startup.yaml filled and in place
+  template: src=../files/startup.yaml dest=/opt/noctua/startup.yaml
+- name: get users.yaml
+  copy: src=users.yaml dest=/opt/noctua/users.yaml
+
+- name: build for noctua
+  command: ./node_modules/.bin/gulp build
+  args:
+    chdir: /opt/noctua/
+
+- name: npm additions for supervisor
+  command: npm install wait-on
+  args:
+    chdir: /opt/noctua/
+
+- name: added supervisor conf
+  copy: src=monarch-minerva.conf dest=/etc/supervisor/conf.d/monarch-minerva.conf
+  become: true
+
+- name: added supervisor conf
+  replace: dest=/etc/supervisor/conf.d/monarch-minerva.conf regexp='TARGET_USER' replace={{ target_user }} backup=yes
+  become: true
+
+- name: added supervisor conf
+  copy: src=monarch-barista.conf dest=/etc/supervisor/conf.d/monarch-barista.conf
+  become: true
+
+- name: added supervisor conf
+  replace: dest=/etc/supervisor/conf.d/monarch-barista.conf regexp='TARGET_USER' replace={{ target_user }} backup=yes
+  become: true
+
+- name: added supervisor conf
+  copy: src=monarch-noctua.conf dest=/etc/supervisor/conf.d/monarch-noctua.conf
+  become: true
+
+- name: added supervisor conf
+  replace: dest=/etc/supervisor/conf.d/monarch-noctua.conf regexp='TARGET_USER' replace={{ target_user }} backup=yes
+  become: true
+
+- name: supervisor reread
+  command: supervisorctl reread
+  become: true
+
+- name: supervisor update
+  command: supervisorctl update
+  become: true
+
+- name: Copy nginx conf
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+  become: true
+
+- name: Restart nginx
+  service: name=nginx state=restarted
+  become: true
+
