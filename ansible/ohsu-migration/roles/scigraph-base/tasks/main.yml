@@ -38,3 +38,11 @@
 - name: add monarch user to the docker group
   command: bash -c 'sudo usermod -aG docker monarch'
   become: true
+
+- name: install xorg
+  apt: name=xorg state=latest update_cache=yes
+  become: true
+
+- name: install xfvb
+  apt: name=xfvb state=latest update_cache=yes
+  become: true
