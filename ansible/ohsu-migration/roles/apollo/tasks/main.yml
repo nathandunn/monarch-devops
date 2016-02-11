@@ -82,11 +82,21 @@
 - name: copy setenv.sh
   copy: src=setenv.sh dest=/usr/share/tomcat7/bin mode=0744
 
+- name: copy pg_hba.conf
+  copy: src=pg_hba_conf /etc/postgresql/pg_hba.conf
+  become: true
+
+# For some reason does not work all the time...
 - name: createuser
   postgresql_user: name=monarch password=monarch role_attr_flags=SUPERUSER
+  become: true
+  become_user: postgres
 
+# For some reason does not work all the time...
 - name: createdb
   postgresql_db: name=apollo-production login_password=monarch login_user=monarch
+  become: true
+  become_user: postgres
 
 - name: restart tomcat
   command: service restart tomcat7
