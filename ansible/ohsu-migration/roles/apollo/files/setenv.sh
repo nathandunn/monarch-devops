@@ -1,10 +1,5 @@
-export CATALINA_OPTS="-Xmx12288m -Xms8192m \
-        -XX:PermSize=256m \
-        -XX:MaxPermSize=1024m \
-        -XX:ReservedCodeCacheSize=64m \
-        -XX:+UseG1GC \
+export CATALINA_OPTS="-Xms512m -Xmx1g \
         -XX:+CMSClassUnloadingEnabled \
-        -Xloggc:$CATALINA_HOME/logs/gc.log \
-        -XX:+PrintHeapAtGC \
-        -XX:+PrintGCDetails \
-        -XX:+PrintGCTimeStamps"
+        -XX:+CMSPermGenSweepingEnabled \
+        -XX:+UseConcMarkSweepGC \
+        -XX:MaxPermSize=256m"
