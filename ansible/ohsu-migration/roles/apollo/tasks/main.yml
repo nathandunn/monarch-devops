@@ -60,8 +60,7 @@
 
 - name: package apollo
   command: bash -c "cd /opt/apollo && ./apollo deploy"
-  become: true
-  become_user: {{ target_user }}
+  become: false
 
 - name: move war
   command: mv /opt/apollo/target/apollo-2.0.2-RC1.war /var/lib/tomcat7/webapps/
