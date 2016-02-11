@@ -72,12 +72,8 @@
 - name: createuser
   postgresql_user: name=monarch password=monarch role_attr_flags=SUPERUSER
 
-
 - name: createdb
   postgresql_db: name=apollo-production login_password=monarch login_user=monarch
-
-  command: bash -c "createdb -E UTF-8 -O monarch apollo-production"
-  become_user: postgres
 
 - name: restart tomcat
   command: service restart tomcat7
