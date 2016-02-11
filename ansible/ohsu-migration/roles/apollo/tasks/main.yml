@@ -76,7 +76,7 @@
   become: false
 
 - name: move war
-  command: mv /opt/apollo/target/apollo-2.0.2-RC1.war /var/lib/tomcat7/webapps/apollo
+  command: mv /opt/apollo/target/apollo-2.0.2-RC1.war /var/lib/tomcat7/webapps/apollo.war
   become: true
 
 - name: copy setenv.sh
