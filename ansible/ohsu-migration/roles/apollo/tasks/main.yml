@@ -45,6 +45,10 @@
   apt: name=ant state=latest update_cache=yes
   become: true
 
+- name: Copy nginx conf
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+  become: true
+
 - name: Download the Apollo release
   get_url: url=https://github.com/GMOD/Apollo/archive/2.0.2-RC1.zip dest=/tmp/2.0.2-RC1.zip
 
@@ -86,10 +90,6 @@
 
 - name: restart tomcat
   command: service restart tomcat7
-  become: true
-
-- name: Copy nginx conf
-  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
   become: true
 
 - name: Restart nginx
