@@ -1,0 +1,93 @@
+---
+
+- name: Install libexpat1-dev
+  apt: name=libexpat1-dev state=latest update_cache=yes
+  become: true
+
+- name: Install postgresql
+  apt: name=postgresql state=latest update_cache=yes
+  become: true
+
+- name: Install postgresql-server-dev-all
+  apt: name=postgresql-server-dev-all state=latest update_cache=yes
+  become: true
+
+- name: Install tomcat7
+  apt: name=tomcat7 state=latest update_cache=yes
+  become: true
+
+- name: Install git
+  apt: name=git state=latest update_cache=yes
+  become: true
+
+- name: Install curl
+  apt: name=curl state=latest update_cache=yes
+  become: true
+
+- name: Install zip
+  apt: name=zip state=latest update_cache=yes
+  become: true
+
+- name: Install python-software-properties
+  apt: name=python-software-properties state=latest update_cache=yes
+  become: true
+
+- name: Install ant
+  apt: name=ant state=latest update_cache=yes
+  become: true
+
+- name: Download the Apollo release
+  get_url: url=https://github.com/GMOD/Apollo/archive/2.0.2-RC1.zip dest=/tmp/2.0.2-RC1.zip
+
+- name: unzip the archive
+  unarchive: src=/tmp/2.0.2-RC1.zip dest=/opt copy=no
+  become: true
+
+- name: rename folder
+  shell: mv /opt/Apollo-2.0.2-RC1 /opt/apollo
+  become: true
+
+- name: chown
+  command: chown -R {{ target_user }}:{{ target_user }} /opt/apollo
+  become: true
+
+- name: copy conf file
+  copy: src=apollo-config.groovy dest=/opt/apollo/apollo-config.groovy
+
+- name: chown
+  command: chown -R {{ target_user }}:{{ target_user }} /opt/apollo/apollo-config.groovy
+  become: true
+
+- name: package apollo
+  command: bash -c "cd /opt/apollo && ./apollo deploy"
+  become: true
+  become_user: {{ target_user }}
+
+- name: move war
+  command: mv /opt/apollo/target/apollo-2.0.2-RC1.war /var/lib/tomcat7/webapps/
+  become: true
+
+- name: copy setenv.sh
+  copy: src=setenv.sh dest=/usr/share/tomcat7/bin mode=0744
+
+- name: createuser
+  postgresql_user: name=monarch password=monarch role_attr_flags=SUPERUSER
+
+
+- name: createdb
+  postgresql_db: name=apollo-production login_password=monarch login_user=monarch
+
+  command: bash -c "createdb -E UTF-8 -O monarch apollo-production"
+  become_user: postgres
+
+- name: restart tomcat
+  command: service restart tomcat7
+  become: true
+
+- name: Copy nginx conf
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+  become: true
+
+- name: Restart nginx
+  service: name=nginx state=restarted
+  become: true

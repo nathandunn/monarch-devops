@@ -6,3 +6,7 @@
   become: true
   roles:
     - java7-oracle
+    - nginx
+    - apollo
+  vars:
+    target_user: vagrant
