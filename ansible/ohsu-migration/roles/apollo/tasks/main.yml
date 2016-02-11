@@ -32,6 +32,15 @@
   apt: name=python-software-properties state=latest update_cache=yes
   become: true
 
+- name: Install prerequisites
+  become: true
+  apt: name={{ item }} state=latest
+  with_items:
+    - libpq-dev
+    - python-psycopg2
+  tags:
+    - packages
+
 - name: Install ant
   apt: name=ant state=latest update_cache=yes
   become: true
