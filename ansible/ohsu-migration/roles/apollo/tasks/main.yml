@@ -50,14 +50,14 @@
   become: true
 
 - name: Download the Apollo release
-  get_url: url=https://github.com/GMOD/Apollo/archive/2.0.2-RC1.zip dest=/tmp/2.0.2-RC1.zip
+  get_url: url=https://github.com/GMOD/Apollo/archive/2.0.2-RC2.zip dest=/tmp/2.0.2-RC2.zip
 
 - name: unzip the archive
-  unarchive: src=/tmp/2.0.2-RC1.zip dest=/opt copy=no
+  unarchive: src=/tmp/2.0.2-RC2.zip dest=/opt copy=no
   become: true
 
 - name: rename folder
-  shell: mv /opt/Apollo-2.0.2-RC1 /opt/apollo
+  shell: mv /opt/Apollo-2.0.2-RC2 /opt/apollo
   become: true
 
 - name: chown
@@ -76,7 +76,7 @@
   become: false
 
 - name: move war
-  command: mv /opt/apollo/target/apollo-2.0.2-RC1.war /var/lib/tomcat7/webapps/apollo.war
+  command: mv /opt/apollo/target/apollo-2.0.2-RC2.war /var/lib/tomcat7/webapps/apollo.war
   become: true
 
 - name: copy setenv.sh
