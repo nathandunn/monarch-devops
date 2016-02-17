@@ -17,6 +17,7 @@ environments {
         dataSource.url = "jdbc:postgresql://localhost/apollo-test"
     }
     production {
+        grails.serverURL = "http://genome.monarchinitiative.org/apollo/"
         dataSource{
             dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
             username = "monarch"
