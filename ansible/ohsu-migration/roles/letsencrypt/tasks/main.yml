@@ -18,7 +18,7 @@
   become: true
 
 - name: generate ssl certificates
-  command: bash -c "./letsencrypt-auto certonly -n -a standalone -m {{ letsencrypt_email }} -d {{ letsencrypt_domain }} --agree-tos"
+  command: bash -c "cd /opt/letsencrypt && ./letsencrypt-auto certonly -n -a standalone -m {{ letsencrypt_email }} -d {{ letsencrypt_domain }} --agree-tos"
   become: true
 
 - name: add ssl renewal script
