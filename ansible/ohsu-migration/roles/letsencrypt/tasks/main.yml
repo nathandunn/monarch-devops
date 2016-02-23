@@ -25,8 +25,9 @@
   copy: src=renew.sh dest=/etc/letsencrypt/renew.sh mode=0744
   become: true
 
-- name: cron job to renewal script the ssl each month on Sunday at 5am
-  cron: name="letsencrypt renewal script" hour="5" job="/opt/letsencrypt/renew.sh" special_time="monthly" user="root" weekday="7"
+- name: cron job to renewal script the ssl each month
+  cron: name="letsencrypt renewal script" special_time="monthly" user="root" job="/opt/letsencrypt/renew.sh"
+  become: true
 
 - name: restart nginx
   service: name=nginx state=started
