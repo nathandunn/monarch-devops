@@ -3,10 +3,11 @@
 # vagrant ssh
 # vagrant provision // rerun the playbook
 - hosts: all
-  become: true
   roles:
-    - java7-oracle
+    - java8-oracle
+    - supervisor
     - nginx
-    - apollo
+    - monarch-mme
+  become: true
   vars:
-    target_user: vagrant
+    target_user: monarch

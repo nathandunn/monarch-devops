@@ -1,0 +1,36 @@
+---
+
+- name: Install git
+  apt: name=git state=latest update_cache=yes
+  become: true
+
+- name: Install bc
+  apt: name=bc state=latest update_cache=yes
+  become: true
+
+- name: clone letsencrypt repo
+  git: repo=https://github.com/letsencrypt/letsencrypt
+       dest=/opt/letsencrypt
+  become: true
+
+- name: stop nginx
+  service: name=nginx state=stopped
+  become: true
+
+- name: generate ssl certificates
+  command: bash -c "./letsencrypt-auto certonly -n -a standalone -m {{ letsencrypt_email }} -d {{ letsencrypt_domain }} --agree-tos"
+  become: true
+
+- name: add ssl renewal script
+  copy: src=renew.sh dest=/etc/letsencrypt/renew.sh mode=0744
+  become: true
+
+- name: cron job to renewal script the ssl each month on Sunday at 5am
+  cron: name="letsencrypt renewal script" hour="5" job="/opt/letsencrypt/renew.sh" special_time=monthly user="root" weekday=7
+
+- name: restart nginx
+  service: name=nginx state=started
+  become: true
+
+# Note that you have to update your nginx configuration, as each configuration differs.
+# Have a look in the file folder to see a configuration example.

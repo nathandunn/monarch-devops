@@ -1,0 +1,6 @@
+- hosts: genome
+  roles:
+    - letsencrypt
+  vars:
+    letsencrypt_email: info@monarchinitiative.org
+    letsencrypt_domain: genome.monarchinitiative.org
