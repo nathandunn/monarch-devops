@@ -50,6 +50,10 @@
 - name: untar solr data
   shell: tar xzfv /var/www/data/solr.tgz -C /var
 
+- name: chown dir
+  shell: chown -R jetty:jetty /var/solr
+  become: true
+
 # For local testing
 #- name: copy local test data
 #  copy: src=/home/jnguyenxuan/solr dest=/var
