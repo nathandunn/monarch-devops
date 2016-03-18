@@ -22,7 +22,7 @@
   become: true
 
 - name: add ssl renewal script
-  copy: src=renew.sh dest=/etc/letsencrypt/renew.sh mode=0744
+  copy: src=renew.sh dest=/opt/letsencrypt/renew.sh mode=0744
   become: true
 
 - name: cron job to renewal script the ssl each month
