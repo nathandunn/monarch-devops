@@ -1,0 +1,31 @@
+- hosts: genome
+  vars:
+    target_user: monarch
+    apollo_version: 2.0.2
+  tasks:
+  - name: Download the Apollo release
+    get_url: url=https://github.com/GMOD/Apollo/archive/{{ apollo_version }}.zip dest=/tmp/{{ apollo_version }}.zip
+
+  - name: unzip the archive
+    unarchive: src=/tmp/{{ apollo_version }}.zip dest=/opt copy=no
+
+  - name: saving conf file
+    copy: src=/opt/apollo/apollo-config.groovy dest=/tmp/apollo-config.groovy remote_src=true
+
+  - name: rename folder
+    shell: mv /opt/Apollo-{{ apollo_version }} /opt/apollo
+
+  - name: chown
+    command: chown -R {{ target_user }}:{{ target_user }} /opt/apollo
+
+  - name: copy conf file
+    command: mv /tmp/apollo-config.groovy /opt/apollo/apollo-config.groovy
+
+  - name: package apollo
+    command: bash -c "cd /opt/apollo && ./apollo deploy"
+
+  - name: move war
+    command: mv /opt/apollo/target/apollo-{{ apollo_version }}.war /var/lib/tomcat7/webapps/apollo.war
+
+  - name: restart tomcat
+    service: name=tomcat7 state=restarted

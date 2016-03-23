@@ -83,7 +83,7 @@
   copy: src=setenv.sh dest=/usr/share/tomcat7/bin mode=0744
 
 - name: copy pg_hba.conf
-  copy: src=pg_hba_conf /etc/postgresql/pg_hba.conf
+  copy: src=pg_hba_conf dest=/etc/postgresql/pg_hba.conf
   become: true
 
 # For some reason does not work all the time...
