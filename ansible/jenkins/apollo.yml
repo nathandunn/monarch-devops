@@ -6,20 +6,22 @@
   - name: Download the Apollo release
     get_url: url=https://github.com/GMOD/Apollo/archive/{{ apollo_version }}.zip dest=/tmp/{{ apollo_version }}.zip
 
-  - name: delete current apollo directory
-    shell: rm -rf /opt/apollo
-
   - name: unzip the archive
     unarchive: src=/tmp/{{ apollo_version }}.zip dest=/opt copy=no
+    become: true
 
   - name: saving conf file
     copy: src=/opt/apollo/apollo-config.groovy dest=/tmp/apollo-config.groovy remote_src=true
+
+  - name: delete current apollo directory
+    shell: rm -rf /opt/apollo
 
   - name: rename folder
     shell: mv /opt/Apollo-{{ apollo_version }} /opt/apollo
 
   - name: chown
     command: chown -R {{ target_user }}:{{ target_user }} /opt/apollo
+    become: true
 
   - name: copy conf file
     command: mv /tmp/apollo-config.groovy /opt/apollo/apollo-config.groovy
