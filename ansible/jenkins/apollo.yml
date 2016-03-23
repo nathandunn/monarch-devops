@@ -6,6 +6,9 @@
   - name: Download the Apollo release
     get_url: url=https://github.com/GMOD/Apollo/archive/{{ apollo_version }}.zip dest=/tmp/{{ apollo_version }}.zip
 
+  - name: delete current apollo directory
+    shell: rm -rf /opt/apollo
+
   - name: unzip the archive
     unarchive: src=/tmp/{{ apollo_version }}.zip dest=/opt copy=no
 
