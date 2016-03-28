@@ -6,12 +6,9 @@
   - name: Download the Apollo release
     get_url: url=https://github.com/GMOD/Apollo/archive/{{ apollo_version }}.zip dest=/tmp/{{ apollo_version }}.zip
 
-  # create directory because of https://github.com/ansible/ansible-modules-core/issues/932
-  - name: create directory
-    shell: sudo mkdir /opt/Apollo-{{ apollo_version }} && sudo chown -R {{ target_user }}:{{ target_user }} /opt/Apollo-{{ apollo_version }}
-
+  # not using unarchive because of https://github.com/ansible/ansible-modules-core/issues/932
   - name: unzip the archive
-    unarchive: src=/tmp/{{ apollo_version }}.zip dest=/opt/Apollo-{{ apollo_version }} copy=no
+    shell: unzip /tmp/{{ apollo_version }}.zip -d /opt
     become: true
 
   - name: saving conf file
