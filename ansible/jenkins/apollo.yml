@@ -14,14 +14,13 @@
     copy: src=/opt/apollo/apollo-config.groovy dest=/tmp/apollo-config.groovy remote_src=true
 
   - name: delete current apollo directory
-    shell: rm -rf /opt/apollo
+    shell: sudo rm -rf /opt/apollo
 
   - name: rename folder
-    shell: mv /opt/Apollo-{{ apollo_version }} /opt/apollo
+    shell: sudo mv /opt/Apollo-{{ apollo_version }} /opt/apollo
 
   - name: chown
-    command: chown -R {{ target_user }}:{{ target_user }} /opt/apollo
-    become: true
+    command: sudo chown -R {{ target_user }}:{{ target_user }} /opt/apollo
 
   - name: copy conf file
     command: mv /tmp/apollo-config.groovy /opt/apollo/apollo-config.groovy
@@ -30,7 +29,7 @@
     command: bash -c "cd /opt/apollo && ./apollo deploy"
 
   - name: move war
-    command: mv /opt/apollo/target/apollo-{{ apollo_version }}.war /var/lib/tomcat7/webapps/apollo.war
+    command: sudo mv /opt/apollo/target/apollo-{{ apollo_version }}.war /var/lib/tomcat7/webapps/apollo.war
 
   - name: restart tomcat
-    service: name=tomcat7 state=restarted
+    shell : sudo service tomcat7 restart
