@@ -6,6 +6,11 @@
   - name: Download the Apollo release
     get_url: url=https://github.com/GMOD/Apollo/archive/{{ apollo_version }}.zip dest=/tmp/{{ apollo_version }}.zip
 
+  # create directory because of https://github.com/ansible/ansible-modules-core/issues/932
+  - name: create directory
+    file: path=/opt/Apollo-{{ apollo_version }} state=directory mode=0755
+    become: true
+
   - name: unzip the archive
     unarchive: src=/tmp/{{ apollo_version }}.zip dest=/opt/Apollo-{{ apollo_version }} copy=no
     become: true
