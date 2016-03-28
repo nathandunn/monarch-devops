@@ -8,7 +8,7 @@
 
   # not using unarchive because of https://github.com/ansible/ansible-modules-core/issues/932
   - name: unzip the archive
-    shell: unzip /tmp/{{ apollo_version }}.zip -d /opt
+    shell: sudo unzip /tmp/{{ apollo_version }}.zip -d /opt
     become: true
 
   - name: saving conf file
