@@ -7,7 +7,7 @@
     get_url: url=https://github.com/GMOD/Apollo/archive/{{ apollo_version }}.zip dest=/tmp/{{ apollo_version }}.zip
 
   - name: unzip the archive
-    unarchive: src=/tmp/{{ apollo_version }}.zip dest=/opt copy=no
+    unarchive: src=/tmp/{{ apollo_version }}.zip dest=/opt/Apollo-{{ apollo_version }} copy=no
     become: true
 
   - name: saving conf file
