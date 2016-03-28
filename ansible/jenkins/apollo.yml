@@ -28,6 +28,12 @@
   - name: package apollo
     command: bash -c "cd /opt/apollo && ./apollo deploy"
 
+  - name: stop tomcat
+    shell : sudo service tomcat7 stop
+
+  - name: remove old version on tomcat
+    shell: sudo rm -rf /var/lib/tomcat7/webapps/apollo/ && sudo rm /var/lib/tomcat7/webapps/apollo/apollo.war
+
   - name: move war
     command: sudo mv /opt/apollo/target/apollo-{{ apollo_version }}.war /var/lib/tomcat7/webapps/apollo.war
 
