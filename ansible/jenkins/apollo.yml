@@ -8,8 +8,7 @@
 
   # create directory because of https://github.com/ansible/ansible-modules-core/issues/932
   - name: create directory
-    file: path=/opt/Apollo-{{ apollo_version }} state=directory mode=0755
-    become: true
+    shell: sudo mkdir /opt/Apollo-{{ apollo_version }}
 
   - name: unzip the archive
     unarchive: src=/tmp/{{ apollo_version }}.zip dest=/opt/Apollo-{{ apollo_version }} copy=no
