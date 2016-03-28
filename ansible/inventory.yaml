@@ -1,38 +1,38 @@
 [monarch-app-prod]
-monarch1-1.cslu.ohsu.edu
+monarch-app-prod
 
 [monarch-mme-prod]
-monarch1-2.cslu.ohsu.edu
+monarch-mme-prod
 
 [monarch-solr-prod]
-monarch2-1.cslu.ohsu.edu
+monarch-solr-prod
 
 [monarch-noctua-prod]
-monarch2-2.cslu.ohsu.edu
+monarch-noctua-prod
 
 [scigraph-ontology-prod]
-monarch3-1.cslu.ohsu.edu
+scigraph-ontology-prod
 
 [monarch-ttl-prod]
-monarch3-2.cslu.ohsu.edu
+monarch-ttl-prod
 
 [scigraph-data-prod]
-monarch4-1.cslu.ohsu.edu
+scigraph-data-prod
 
 [monarch-app-beta]
-monarch1-3.cslu.ohsu.edu
+monarch-app-beta
 
 [monarch-solr-dev]
-monarch2-3.cslu.ohsu.edu
+monarch-solr-dev
 
 [scigraph-ontology-dev]
-monarch3-3.cslu.ohsu.edu
+scigraph-ontology-dev
 
 [scigraph-data-dev]
-monarch4-4.cslu.ohsu.edu
+scigraph-data-dev
 
 [monarch-data-load]
-monarch4-5.cslu.ohsu.edu
+monarch-data-load
 
 [genome]
-monarch2-4.cslu.ohsu.edu
+genome
